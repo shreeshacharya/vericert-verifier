@@ -2,10 +2,15 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const analyzeCertificate = async (imageBase64: string): Promise<any> => {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-  
+  // Vite requires VITE_ prefix for environment variables to be exposed to the client
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("VITE_GEMINI_API_KEY is not defined in the environment variables.");
+  }
+  const ai = new GoogleGenAI({ apiKey });
+
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-2.5-flash',
     contents: {
       parts: [
         {
